@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIO Södermalm | Öppnar snart</title>
+  <meta name="description" content="DIO Södermalm — en ny mötesplats mitt på Medborgarplatsen. Italienskt kök och bar. Öppnar snart. Lämna din mejl så hör vi av oss.">
+  <!-- TILLFÄLLIGT: förhandsvisning på GitHub Pages. TA BORT raden nedan
+       innan sidan går live på riktig domän — annars indexeras den aldrig. -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0A0A0A">
+  <meta property="og:title" content="DIO Södermalm | Öppnar snart">
+  <meta property="og:description" content="En ny mötesplats mitt på Medborgarplatsen. Öppnar snart.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230A0A0A'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='26' letter-spacing='1' fill='%23E8DCC4' text-anchor='middle'%3EDIO%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       FÖRSLAG 1 — "Ridån"
+       Helskärm, allt centrerat, ingenting annat i vägen. Loggan
+       ligger i ett svagt ljussken som andas. Under vecket finns
+       Om oss och Kontakt för den som scrollar.
+       ============================================================ -->
+
+  <main>
+
+    <!-- ---------- Första skärmen ---------- -->
+    <section class="curtain">
+      <div class="glow" aria-hidden="true"></div>
+
+      <div class="curtain-inner">
+
+        <!-- Loggan byggd i text så den blir knivskarp i alla storlekar.
+             I:et är en tunn linje, precis som i originalet. -->
+        <h1 class="logo">
+          <span class="logo-word">
+            <span>D</span><span class="logo-bar" aria-hidden="true"></span><span>O</span>
+            <span class="sr-only">DIO</span>
+          </span>
+          <span class="logo-sub">Södermalm</span>
+        </h1>
+
+        <p class="tagline">Öppnar snart på Medborgarplatsen</p>
+
+        <div class="rule" aria-hidden="true"></div>
+
+        <p class="lead">
+          En ny mötesplats mitt i stan — italienskt kök, en väl vald bar
+          och ett rum att stanna kvar i. Lämna din mejl så är du först
+          att veta när dörrarna öppnar.
+        </p>
+
+        <!-- Formuläret skickar ingenstans än. När vi valt tjänst
+             (t.ex. Mailchimp eller ett eget API) sätts action/method här. -->
+        <form class="signup" novalidate>
+          <label class="sr-only" for="mail-1">Din mejladress</label>
+          <input id="mail-1" type="email" name="email" placeholder="din@mejl.se"
+                 autocomplete="email" required>
+          <button type="submit">Håll mig uppdaterad</button>
+          <p class="form-msg" role="status" aria-live="polite"></p>
+        </form>
+
+        <a class="scroll-hint" href="#om">
+          <span>Om DIO</span>
+          <span class="arrow" aria-hidden="true">↓</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ---------- Om oss ---------- -->
+    <section class="panel" id="om">
+      <div class="wrap">
+        <p class="eyebrow">Om oss</p>
+        <h2>Ett italienskt vardagsrum vid Medborgarplatsen</h2>
+        <p>
+          DIO är en restaurang och bar som öppnar mitt på Medborgarplatsen.
+          Köket är italienskt och ärligt — råvaror som får vara sig själva,
+          pasta som görs på plats och en vinlista som lutar söderut.
+        </p>
+        <p>
+          Kom för en snabb lunch, ett glas efter jobbet eller en lång kväll
+          som drar ut på tiden. Vi bygger just nu vårt team och räknar ner
+          till premiären.
+        </p>
+        <!-- TODO: byt ut texten mot Alexanders egna ord när han skrivit dem. -->
+      </div>
+    </section>
+
+    <!-- ---------- Kontakt ---------- -->
+    <section class="panel alt" id="kontakt">
+      <div class="wrap">
+        <p class="eyebrow">Kontakt</p>
+        <h2>Hör av dig</h2>
+        <dl class="facts">
+          <div>
+            <dt>Adress</dt>
+            <dd>Medborgarplatsen, Stockholm</dd>
+          </div>
+          <div>
+            <dt>Mejl</dt>
+            <dd><a href="mailto:alexander@diosodermalm.se">alexander@diosodermalm.se</a></dd>
+          </div>
+          <div>
+            <dt>Instagram</dt>
+            <dd><a href="https://www.instagram.com/dio.sodermalm/" target="_blank" rel="noopener">@dio.sodermalm</a></dd>
+          </div>
+          <div>
+            <dt>Jobba hos oss</dt>
+            <dd>Vi söker erfarna kockar inom det italienska köket.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 DIO Södermalm</p>
+  </footer>
+
+  <script>
+    /* Enkel klientvalidering + kvitto. Ingen data lämnar sidan än —
+       när backend finns byts detta mot ett riktigt anrop. */
+    document.querySelectorAll('.signup').forEach(function (form) {
+      var field = form.querySelector('input[type="email"]');
+      var msg = form.querySelector('.form-msg');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(field.value.trim());
+
+        if (!ok) {
+          form.classList.add('is-error');
+          msg.textContent = 'Kontrollera mejladressen.';
+          field.focus();
+          return;
+        }
+
+        form.classList.remove('is-error');
+        form.classList.add('is-done');
+        msg.textContent = 'Tack! Vi hör av oss när vi öppnar.';
+        field.value = '';
+      });
+
+      field.addEventListener('input', function () {
+        form.classList.remove('is-error');
+        if (!form.classList.contains('is-done')) msg.textContent = '';
+      });
+    });
+  </script>
+
+</body>
+</html>
