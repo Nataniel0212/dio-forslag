@@ -3,6 +3,22 @@
 Tre frontend-skisser på en "öppnar snart"-sida. Öppna `index.html` i roten
 för att se alla tre bredvid varandra.
 
+## Tillfällig förhandsvisning (att skicka till Alexander)
+
+- Valsida: <https://nataniel0212.github.io/dio-forslag/>
+- Förslag 1: <https://nataniel0212.github.io/dio-forslag/forslag-1/>
+- Förslag 2: <https://nataniel0212.github.io/dio-forslag/forslag-2/>
+- Förslag 3: <https://nataniel0212.github.io/dio-forslag/forslag-3/>
+
+Repot är publikt eftersom GitHub Pages kräver det på gratiskontot, men
+varje sida har `noindex` och `robots.txt` blockerar allt — sökmotorer ska
+alltså inte plocka upp det. Ta bort `<meta name="robots">` när sidan går
+live på den riktiga domänen.
+
+Riv förhandsvisningen när ni valt:
+
+    gh repo delete Nataniel0212/dio-forslag --yes
+
     index.html          valsida (intern, publiceras inte)
     forslag-1/          "Ridån"      — helskärm, centrerat, om/kontakt under vecket
     forslag-2/          "Delad"      — två halvor, flikar i stället för scroll
