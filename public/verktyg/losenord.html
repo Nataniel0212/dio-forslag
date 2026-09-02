@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sätt admin-lösenord | DIO</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="../admin/admin.css">
+</head>
+<body>
+
+<!-- ============================================================
+     Räknar fram hashen som ska stå i miljövariabeln ADMIN_HASH.
+
+     Allt sker i din webbläsare. Lösenordet lämnar aldrig den här sidan —
+     det finns inget anrop till någon server i koden nedan, och därför är
+     det ofarligt att sidan ligger kvar publikt. Den som öppnar den kan
+     bara räkna fram hashar av lösenord de redan känner till.
+     ============================================================ -->
+
+<main class="ruta">
+  <h1>Sätt admin-lösenord</h1>
+  <p class="hjalp">
+    Välj ett lösenord, kopiera värdet du får och lägg in det som
+    <code>ADMIN_HASH</code> bland Cloudflare Pages hemligheter
+    (Settings → Variables and Secrets → Encrypt).
+  </p>
+
+  <p class="fel" id="fel" hidden></p>
+
+  <form id="form">
+    <label for="losenord">Lösenord (minst 12 tecken)</label>
+    <input id="losenord" type="password" autofocus required>
+    <button type="submit">Skapa hash</button>
+  </form>
+
+  <div id="resultat" hidden>
+    <p class="hjalp">Värdet att klistra in:</p>
+    <pre class="hash" id="hash"></pre>
+  </div>
+</main>
+
+<script type="module">
+  /* Exakt samma funktion som servern använder för att kontrollera
+     lösenordet. Ändras varvtalet i src/auth.js måste det ändras här också —
+     hashen bär sitt varvtal med sig, så gamla lösenord fortsätter fungera. */
+  import { skapaHash } from '../../src/auth.js';
+
+  var form = document.getElementById('form');
+  var fel = document.getElementById('fel');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    var losen = document.getElementById('losenord').value;
+    fel.hidden = true;
+
+    if (losen.length < 12) {
+      fel.textContent = 'För kort — ta minst 12 tecken.';
+      fel.hidden = false;
+      return;
+    }
+
+    document.getElementById('hash').textContent = await skapaHash(losen);
+    document.getElementById('resultat').hidden = false;
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Sidan ar live. Sokmotorer ar valkomna, utom pa endpointerna och i
+# adminvyn - de har ingenting dar att gora. Adminsidan bar dessutom sin
+# egen noindex.
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /verktyg/

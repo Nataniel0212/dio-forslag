@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anmälningar | DIO Södermalm</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ============================================================
+     Adminvyn. En statisk sida som hämtar allt från /api/admin/*.
+     Inloggningen sitter i en HttpOnly-kaka, så sidan vet aldrig något
+     hemligt — den frågar bara servern vad den får se.
+     ============================================================ -->
+
+<!-- ---------- Inloggning ---------- -->
+<main class="ruta" id="inloggning" hidden>
+  <h1>DIO — admin</h1>
+  <p class="fel" id="login-fel" hidden></p>
+  <form id="login-form">
+    <label for="losenord">Lösenord</label>
+    <input id="losenord" name="losenord" type="password" autocomplete="current-password" required>
+    <button type="submit">Logga in</button>
+  </form>
+</main>
+
+<!-- ---------- Översikt ---------- -->
+<div id="vyn" hidden>
+  <header class="topp">
+    <h1>Anmälningar</h1>
+    <nav>
+      <a href="#" id="till-utskick">Skicka öppningsmejl</a>
+      <a href="/api/admin/export">Ladda ner CSV</a>
+      <a href="#" id="ut">Logga ut</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="tal">
+      <div class="tal-kort"><span class="siffra" id="t-aktiva">–</span><span class="etikett">på listan</span></div>
+      <div class="tal-kort"><span class="siffra" id="t-veckan">–</span><span class="etikett">senaste 7 dagarna</span></div>
+      <div class="tal-kort"><span class="siffra" id="t-idag">–</span><span class="etikett">i dag</span></div>
+      <div class="tal-kort"><span class="siffra" id="t-avanmalda">–</span><span class="etikett">avanmälda</span></div>
+    </section>
+
+    <h2>Senaste 50</h2>
+    <p class="tom" id="tom" hidden>Ingen har anmält sig än.</p>
+    <table id="tabell" hidden>
+      <thead><tr><th>Mejladress</th><th>Status</th><th>Anmäld</th></tr></thead>
+      <tbody id="rader"></tbody>
+    </table>
+  </main>
+</div>
+
+<!-- ---------- Utskick ---------- -->
+<div id="utskicksvyn" hidden>
+  <header class="topp">
+    <h1>Öppningsmejl</h1>
+    <nav>
+      <a href="#" id="tillbaka">Tillbaka</a>
+      <a href="#" id="ut2">Logga ut</a>
+    </nav>
+  </header>
+
+  <main>
+    <p class="fel" id="u-fel" hidden></p>
+    <p class="ok" id="u-ok" hidden></p>
+
+    <div id="u-pagar" hidden>
+      <p>Utskicket är igång. Låt fliken stå öppen tills det står klart.</p>
+      <p class="status" id="u-status">Förbereder …</p>
+    </div>
+
+    <form id="u-form">
+      <p class="hjalp">
+        Går till <strong id="u-antal">–</strong> adresser. Skicka alltid ett
+        testmejl till dig själv först — ett utskick går inte att ångra.
+      </p>
+
+      <label for="amne">Ämne</label>
+      <input id="amne" name="amne" type="text" value="Nu öppnar DIO Södermalm" required>
+
+      <label for="text">Text</label>
+      <textarea id="text" name="text" rows="14" required></textarea>
+      <p class="hjalp">Avanmälningslänken läggs till automatiskt sist i brevet.</p>
+
+      <div class="rad">
+        <input id="testadress" name="testadress" type="email" placeholder="din@mejl.se">
+        <button type="button" id="testa" class="andrahand">Skicka testmejl</button>
+      </div>
+
+      <label class="kryss">
+        <input type="checkbox" id="bekraftat">
+        Jag har läst igenom brevet och vill skicka det till alla.
+      </label>
+
+      <button type="submit">Skicka till alla</button>
+    </form>
+  </main>
+</div>
+
+<script>
+/* ---------- Små hjälpare ---------- */
+
+var $ = function (id) { return document.getElementById(id); };
+
+function visa(el, pa) { el.hidden = !pa; }
+
+function besked(el, text) {
+  el.textContent = text || '';
+  visa(el, Boolean(text));
+}
+
+/* Alla anrop går samma väg: kakan följer med, svaret är JSON. Kommer det
+   401 tillbaka har sessionen gått ut och vi visar inloggningen igen. */
+function anropa(url, data) {
+  var val = {
+    method: data ? 'POST' : 'GET',
+    headers: { 'Accept': 'application/json' },
+    credentials: 'same-origin'
+  };
+
+  if (data) {
+    val.body = new URLSearchParams(data);
+  }
+
+  return fetch(url, val).then(function (svar) {
+    if (svar.status === 401) {
+      visaInloggning();
+      throw new Error('Sessionen har gått ut. Logga in igen.');
+    }
+    return svar.json().then(function (kropp) {
+      if (!kropp.ok) throw new Error(kropp.meddelande || 'Något gick fel.');
+      return kropp;
+    });
+  });
+}
+
+/* Databasen lagrar UTC. Här visas svensk tid. */
+function svenskTid(iso) {
+  var d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' });
+}
+
+/* ---------- Vyer ---------- */
+
+function visaInloggning() {
+  visa($('inloggning'), true);
+  visa($('vyn'), false);
+  visa($('utskicksvyn'), false);
+}
+
+function visaOversikt() {
+  visa($('inloggning'), false);
+  visa($('vyn'), true);
+  visa($('utskicksvyn'), false);
+
+  anropa('/api/admin/stat')
+    .then(function (d) {
+      $('t-aktiva').textContent = d.aktiva;
+      $('t-veckan').textContent = d.veckan;
+      $('t-idag').textContent = d.idag;
+      $('t-avanmalda').textContent = d.avanmalda;
+
+      var kropp = $('rader');
+      kropp.textContent = '';
+
+      d.senaste.forEach(function (rad) {
+        var tr = document.createElement('tr');
+        [rad.epost, rad.status === 'aktiv' ? 'Aktiv' : 'Avanmäld', svenskTid(rad.skapad)]
+          .forEach(function (varde) {
+            var td = document.createElement('td');
+            td.textContent = varde;   // textContent, aldrig innerHTML: adresserna
+            tr.appendChild(td);        // kommer utifrån och ska inte tolkas som HTML
+          });
+        kropp.appendChild(tr);
+      });
+
+      visa($('tom'), d.senaste.length === 0);
+      visa($('tabell'), d.senaste.length > 0);
+    })
+    .catch(function () { /* 401 hanteras redan i anropa() */ });
+}
+
+function visaUtskick() {
+  visa($('inloggning'), false);
+  visa($('vyn'), false);
+  visa($('utskicksvyn'), true);
+  besked($('u-fel'), '');
+  besked($('u-ok'), '');
+
+  anropa('/api/admin/utskick', { atgard: 'status' }).then(function (d) {
+    $('u-antal').textContent = d.aktiva;
+
+    /* Ett utskick som avbrutits mitt i plockas upp igen så fort sidan
+       öppnas — därför är den här kontrollen viktigare än den ser ut. */
+    if (d.pagaende) {
+      kor(d.pagaende.id);
+    }
+  });
+}
+
+/* ---------- Utskicket ---------- */
+
+function kor(id) {
+  visa($('u-form'), false);
+  visa($('u-pagar'), true);
+
+  var skickade = 0;
+  var trasiga = 0;
+
+  function omgang() {
+    anropa('/api/admin/utskick', { atgard: 'omgang', utskick: id })
+      .then(function (d) {
+        skickade += d.skickade;
+        trasiga += d.misslyckade;
+        $('u-status').textContent = 'Skickat ' + skickade + ' mejl. ' + d.kvar + ' kvar.';
+
+        if (d.kvar > 0) {
+          setTimeout(omgang, 1200);   // andrum mellan omgångarna
+        } else {
+          $('u-status').textContent = 'Klart. ' + skickade + ' mejl skickade'
+            + (trasiga ? ', ' + trasiga + ' misslyckades.' : '.');
+        }
+      })
+      .catch(function (fel) {
+        $('u-status').textContent = 'Utskicket stannade: ' + fel.message
+          + ' Ladda om sidan så fortsätter det där det slutade.';
+      });
+  }
+
+  omgang();
+}
+
+/* ---------- Händelser ---------- */
+
+$('login-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  besked($('login-fel'), '');
+
+  anropa('/api/admin/login', { losenord: $('losenord').value })
+    .then(function () {
+      $('losenord').value = '';
+      visaOversikt();
+    })
+    .catch(function (fel) { besked($('login-fel'), fel.message); });
+});
+
+$('till-utskick').addEventListener('click', function (e) { e.preventDefault(); visaUtskick(); });
+$('tillbaka').addEventListener('click', function (e) { e.preventDefault(); visaOversikt(); });
+
+[$('ut'), $('ut2')].forEach(function (lank) {
+  lank.addEventListener('click', function (e) {
+    e.preventDefault();
+    anropa('/api/admin/logout', { x: '1' }).then(visaInloggning).catch(visaInloggning);
+  });
+});
+
+$('testa').addEventListener('click', function () {
+  besked($('u-fel'), '');
+  besked($('u-ok'), '');
+
+  anropa('/api/admin/utskick', {
+    atgard: 'test',
+    testadress: $('testadress').value,
+    amne: $('amne').value,
+    text: $('text').value
+  })
+    .then(function (d) { besked($('u-ok'), d.meddelande); })
+    .catch(function (fel) { besked($('u-fel'), fel.message); });
+});
+
+$('u-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  besked($('u-fel'), '');
+  besked($('u-ok'), '');
+
+  anropa('/api/admin/utskick', {
+    atgard: 'starta',
+    amne: $('amne').value,
+    text: $('text').value,
+    bekraftat: $('bekraftat').checked ? 'ja' : ''
+  })
+    .then(function (d) { kor(d.utskick); })
+    .catch(function (fel) { besked($('u-fel'), fel.message); });
+});
+
+/* ---------- Start ---------- */
+
+$('text').value = [
+  'Hej!',
+  '',
+  'Du skrev upp dig på vår lista för att få veta när vi öppnar. Nu är det dags.',
+  '',
+  'DIO Södermalm slår upp dörrarna på Medborgarplatsen den DATUM. Välkommen in',
+  'på en pasta, ett glas vin eller bara en kaffe.',
+  '',
+  'Vi ses!',
+  'Alexander med team'
+].join('\n');
+
+anropa('/api/admin/login')
+  .then(function (d) { d.inloggad ? visaOversikt() : visaInloggning(); })
+  .catch(visaInloggning);
+</script>
+
+</body>
+</html>

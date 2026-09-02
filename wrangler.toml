@@ -1,0 +1,26 @@
+# ============================================================
+# Cloudflare Pages — DIO Södermalm
+#
+# public/    statiska filer, det som besökaren laddar
+# functions/ API:t, en fil per adress under /api/
+# src/       delad kod som functions importerar, serveras aldrig
+#
+# Hemligheter (ADMIN_HASH, RESEND_API_KEY) står inte här. De sätts i
+# Cloudflares gränssnitt under Settings → Variables and Secrets, och
+# lokalt i .dev.vars som ligger i .gitignore.
+# ============================================================
+
+name = "dio-sodermalm"
+pages_build_output_dir = "public"
+compatibility_date = "2026-09-02"
+
+[vars]
+AVSANDARE_NAMN = "DIO Södermalm"
+AVSANDARE_EPOST = "alexander@diosodermalm.se"
+SAJT_URL = "https://diosodermalm.se"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "dio"
+# Fylls i av `npx wrangler d1 create dio` — kommandot skriver ut id:t.
+database_id = "SATTS_VID_INSTALLATION"  # lokalt struntar wrangler i vardet

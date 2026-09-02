@@ -1,11 +1,11 @@
-# Databaslösenord och admin-hash. Skapas från inc/config.example.php
-# och ska aldrig ligga i repot — repot är publikt.
-inc/config.php
-
 # Lokala testfiler
 *.sqlite
 
 # De två förslag som inte valdes. README säger att de inte ska publiceras,
-# och repot är publikt via GitHub Pages — alltså får de inte råka följa med
-# in i ett commit.
+# och repot är publikt — alltså får de inte råka följa med in i ett commit.
 arkiv/
+
+# Cloudflare
+node_modules/
+.wrangler/
+.dev.vars

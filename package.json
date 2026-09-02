@@ -1,0 +1,14 @@
+{
+  "name": "dio-sodermalm",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev",
+    "schema": "wrangler d1 execute dio --local --file=schema.sql",
+    "schema:skarp": "wrangler d1 execute dio --remote --file=schema.sql",
+    "deploy": "wrangler pages deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
