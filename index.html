@@ -88,12 +88,23 @@
           inga utskick däremellan.
         </p>
 
-        <!-- Formuläret skickar ingenstans än. action/method sätts när
-             vi valt tjänst för utskicken. -->
-        <form class="signup" novalidate>
+        <!-- Formuläret postar till api/anmal.php. Skriptet längst ner
+             skickar i bakgrunden när JavaScript finns; utan JavaScript
+             postar webbläsaren på vanligt vis och servern skickar
+             tillbaka hit med ?anmalan=ok i adressen. Båda vägarna
+             fungerar, ingen adress går förlorad. -->
+        <form class="signup" action="api/anmal.php" method="post" novalidate>
           <label class="sr-only" for="mail">Din mejladress</label>
           <input id="mail" type="email" name="email" placeholder="din@mejl.se"
                  autocomplete="email" required>
+
+          <!-- Honungsfälla: dold för besökare, men enkla spamrobotar fyller
+               i allt de hittar. Är fältet ifyllt sparar servern ingenting. -->
+          <div class="honung" aria-hidden="true">
+            <label for="webbplats">Lämna det här fältet tomt</label>
+            <input id="webbplats" name="webbplats" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
           <button type="submit">Skicka</button>
           <p class="form-msg" role="status" aria-live="polite"></p>
         </form>
@@ -139,11 +150,12 @@
     })();
 
     /* ---------- Formulär ----------
-       Klientvalidering och kvitto. Ingen data lämnar sidan än — när vi
-       valt tjänst för utskicken byts detta mot ett riktigt anrop. */
+       Adressen kollas här för snabb återkoppling och sedan en gång till
+       på servern — klientvalidering är bekvämlighet, aldrig skydd. */
     document.querySelectorAll('.signup').forEach(function (form) {
       var field = form.querySelector('input[type="email"]');
       var msg = form.querySelector('.form-msg');
+      var knapp = form.querySelector('button');
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -157,9 +169,37 @@
         }
 
         form.classList.remove('is-error');
-        form.classList.add('is-done');
-        msg.textContent = 'Tack! Vi hör av oss när vi öppnar.';
-        field.value = '';
+        knapp.disabled = true;
+        msg.textContent = 'Skickar …';
+
+        fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        })
+          .then(function (svar) { return svar.text(); })
+          .then(function (text) {
+            var data;
+            /* Kommer det något annat än JSON tillbaka är det servern som
+               inte svarar som den ska — då ska besökaren få en väg fram
+               ändå, inte ett tyst misslyckande. */
+            try {
+              data = JSON.parse(text);
+            } catch (e) {
+              throw new Error('Vi når inte servern just nu. Mejla oss på alexander@diosodermalm.se så lägger vi upp dig.');
+            }
+            if (!data.ok) {
+              throw new Error(data.meddelande || 'Något gick fel. Försök igen om en stund.');
+            }
+            form.classList.add('is-done');
+            msg.textContent = data.meddelande;
+            field.value = '';
+          })
+          .catch(function (fel) {
+            knapp.disabled = false;
+            form.classList.add('is-error');
+            msg.textContent = fel.message;
+          });
       });
 
       field.addEventListener('input', function () {
@@ -167,6 +207,25 @@
         if (!form.classList.contains('is-done')) msg.textContent = '';
       });
     });
+
+    /* Utan JavaScript postar formuläret på vanligt vis och servern skickar
+       tillbaka hit. Då står utfallet i adressen — visa kvittot ändå. */
+    (function () {
+      var svar = new URLSearchParams(location.search).get('anmalan');
+      if (!svar) return;
+
+      var form = document.querySelector('.signup');
+      var msg = form && form.querySelector('.form-msg');
+      if (!msg) return;
+
+      if (svar === 'ok') {
+        form.classList.add('is-done');
+        msg.textContent = 'Tack! Vi hör av oss när vi öppnar.';
+      } else {
+        form.classList.add('is-error');
+        msg.textContent = 'Något gick fel. Försök igen om en stund.';
+      }
+    })();
   </script>
 
 </body>

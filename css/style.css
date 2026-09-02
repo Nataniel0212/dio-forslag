@@ -386,6 +386,17 @@ a { color: inherit; }
 
 .signup button:hover { background: transparent; color: var(--cream); }
 
+/* Honungsfällan i formuläret. Fältet flyttas ut ur bild i stället för
+   att döljas med display: none — en del robotar hoppar nämligen över
+   fält som är gömda på det sättet, och då fyller de inte i fällan. */
+.honung {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .form-msg {
   flex: 1 0 100%;
   min-height: 1.5rem;

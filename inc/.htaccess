@@ -1,0 +1,10 @@
+# Katalogen innehaller serverkod och databaslosenord. Ingenting harinne
+# ska ga att hamta over webben - filerna inkluderas av PHP, aldrig
+# oppnas direkt. (Ren ASCII: .htaccess lases av Apache, inte av oss.)
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Deny from all
+</IfModule>
