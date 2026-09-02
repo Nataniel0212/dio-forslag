@@ -42,9 +42,11 @@
 
 <script type="module">
   /* Exakt samma funktion som servern använder för att kontrollera
-     lösenordet. Ändras varvtalet i src/auth.js måste det ändras här också —
-     hashen bär sitt varvtal med sig, så gamla lösenord fortsätter fungera. */
-  import { skapaHash } from '../../src/auth.js';
+     lösenordet — servern når den via src/auth.js, som återexporterar
+     härifrån. Importera hash.js direkt och inte src/auth.js: src/ ligger
+     utanför public/ och serveras aldrig, så den vägen ger 404 och hela
+     modulen dör tyst med en knapp som inte gör något. */
+  import { skapaHash } from './hash.js';
 
   var form = document.getElementById('form');
   var fel = document.getElementById('fel');
