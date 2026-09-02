@@ -1,3 +1,7 @@
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# De tva forslag som inte valdes. Ligger kvar lokalt men publiceras inte.
+# Finns aven i git-historiken (commit afd2b6c) om de behover tillbaka.
+arkiv/

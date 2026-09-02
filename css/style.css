@@ -1,22 +1,35 @@
 /* ============================================================
-   DIO SÖDERMALM — förslag 3, "Editorial"
-   Koncept: en riktig liten sajt redan nu. Hero med nedräkning,
-   sedan sektioner i två spalter — etikett till vänster, innehåll
-   till höger. Ramverket står kvar när menyn och bilderna kommer.
+   DIO SÖDERMALM — startsida före öppning
+   Koncept: samma mörkt gröna rum som Instagram, loggan i ett
+   svagt sken. Sektionerna under heron står i två spalter —
+   etikett till vänster, innehåll till höger.
 
-   Palett:  natt   #0A0A0A   panel #101010
-            kräm   #F0E9DB   guld  #C8A96A   dov #8C877E
-   Typografi: Cormorant Garamond (display) · Jost (etiketter/brödtext)
+   Palett (samplad ur Alexanders logotypbild):
+     grön   #000E02   bakgrund, nästan svart men tydligt grön
+     panel  #021406   en aning ljusare för varannan sektion
+     cream  #EFEDE3   linjer och text
+   Ingen guld längre — varumärket är två färger, grönt och cream.
+   Djupet kommer från opacitet, inte från fler kulörer.
+
+   Typografi: Cormorant Garamond (rubriker) · Jost (etiketter/brödtext)
    Motion:  snabb 150ms · standard 300ms · reveal 700ms
    ============================================================ */
 
 :root {
-  --night: #0A0A0A;
-  --panel: #101010;
-  --cream: #F0E9DB;
-  --gold: #C8A96A;
-  --muted: #8C877E;
-  --line: rgba(240, 233, 219, 0.14);
+  --green: #000E02;
+  --panel: #021406;
+  --cream: #EFEDE3;
+
+  /* Cream i olika styrkor — hierarkin byggs med ljus, inte med kulör. */
+  --text: rgba(239, 237, 227, 0.78);
+  --muted: rgba(239, 237, 227, 0.45);
+  --line: rgba(239, 237, 227, 0.13);
+
+  /* Skenet bakom loggan: grönt utåt, varmt cream närmast linjerna —
+     precis som i profilbilden på Instagram. Håller sig medvetet svagt;
+     bakgrunden ska läsa som platt mörkgrön, inte som en strålkastare. */
+  --glow-green: rgba(46, 138, 74, 0.10);
+  --glow-cream: rgba(239, 237, 227, 0.14);
 
   --serif: "Cormorant Garamond", Didot, Georgia, serif;
   --sans: "Jost", "Helvetica Neue", Arial, sans-serif;
@@ -33,7 +46,7 @@
 html { scroll-behavior: smooth; scrollbar-gutter: stable; }
 
 body {
-  background: var(--night);
+  background: var(--green);
   color: var(--cream);
   font-family: var(--sans);
   font-weight: 300;
@@ -41,7 +54,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-::selection { background: var(--gold); color: var(--night); }
+::selection { background: var(--cream); color: var(--green); }
 
 a { color: inherit; }
 
@@ -54,15 +67,6 @@ a { color: inherit; }
   white-space: nowrap;
 }
 
-/* I:et i DIO är en tunn stapel, inte en bokstav — gäller både
-   sidhuvudets lilla logga och den stora i heron. */
-.logo-bar {
-  width: 1px;
-  height: 0.78em;
-  background: currentColor;
-  opacity: 0.9;
-}
-
 /* ---------- Sidhuvud ---------- */
 
 .topbar {
@@ -73,8 +77,8 @@ a { color: inherit; }
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  padding: 1.1rem var(--gutter);
-  background: rgba(10, 10, 10, 0.72);
+  padding: 1.15rem var(--gutter);
+  background: rgba(0, 14, 2, 0.72);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
 }
@@ -82,11 +86,15 @@ a { color: inherit; }
 .topbar-logo {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  font-family: var(--serif);
-  font-size: 1.5rem;
-  letter-spacing: 0.06em;
   text-decoration: none;
+  color: var(--cream);
+}
+
+/* Märket i sidhuvudet: höjden styr, bredden följer proportionerna. */
+.mark {
+  height: 1.35rem;
+  width: auto;
+  overflow: visible;
 }
 
 .topbar-nav {
@@ -122,23 +130,27 @@ a { color: inherit; }
   overflow: hidden;
 }
 
+/* Två lager sken i samma punkt: ett brett grönt som lyfter rummet,
+   ett smalare cream som ligger tätt intill loggan. */
 .hero-glow {
   position: absolute;
-  top: 40%;
+  top: 48%;
   left: 50%;
-  width: min(95vw, 1000px);
+  width: min(110vw, 980px);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle,
-              rgba(200, 169, 106, 0.15) 0%,
-              rgba(200, 169, 106, 0.04) 42%,
-              transparent 70%);
+  background:
+    radial-gradient(circle, var(--glow-cream) 0%, transparent 24%),
+    radial-gradient(circle, var(--glow-green) 0%, transparent 72%);
   pointer-events: none;
 }
 
+/* Bredden sätts explicit, inte med max-width: hero är ett grid med
+   place-items: center, och då krymper ett rutobjekt till sitt innehåll —
+   vilket gör att procentbredder inuti (loggan) får fel referens. */
 .hero-inner {
   position: relative;
-  max-width: 40rem;
+  width: min(40rem, 100%);
   animation: rise 900ms var(--ease-out) both;
 }
 
@@ -154,83 +166,45 @@ a { color: inherit; }
   color: var(--muted);
 }
 
-.eyebrow.gold { color: var(--gold); }
-
-/* ---------- Loggan i heron ---------- */
+/* ---------- Loggan ---------- */
 
 .logo {
+  margin: clamp(1.75rem, 5vw, 2.5rem) 0 0;
   font-weight: 400;
-  margin-top: 1.75rem;
+  line-height: 0;
 }
 
-.logo-word {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(0.7rem, 3vw, 1.5rem);
-  font-family: var(--serif);
-  font-size: clamp(3.6rem, 15vw, 7.5rem);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: 0.04em;
+.logo-svg {
+  width: min(30rem, 78vw);
+  height: auto;
+  color: var(--cream);
+  /* overflow: visible så att linjebredden inte kapas mot viewBox-kanten. */
+  overflow: visible;
+  /* Samma varma sken som i originalet — ligger på formerna, inte bakom. */
+  filter: drop-shadow(0 0 14px rgba(239, 237, 227, 0.22))
+          drop-shadow(0 0 42px rgba(239, 237, 227, 0.12));
 }
 
+/* Ortsnamnet sitter inne i samma SVG, så det skalar exakt med märket
+   och behåller sin spärrning oavsett skärmbredd. */
 .logo-sub {
-  display: block;
-  margin-top: clamp(0.5rem, 2vw, 0.85rem);
-  font-size: clamp(0.68rem, 2.2vw, 0.9rem);
-  letter-spacing: 0.6em;
-  text-indent: 0.6em; /* kompenserar spärrningen så texten står mitt under */
-  text-transform: uppercase;
+  font-family: var(--sans);
+  font-weight: 300;
 }
 
 .hero-line {
-  margin-top: clamp(1.75rem, 5vw, 2.5rem);
+  margin-top: clamp(2rem, 6vw, 3rem);
   font-family: var(--serif);
   font-size: clamp(1.5rem, 5vw, 2.1rem);
   font-style: italic;
-  color: rgba(240, 233, 219, 0.85);
-}
-
-/* ---------- Nedräkning ---------- */
-
-.countdown {
-  display: flex;
-  justify-content: center;
-  gap: clamp(1.25rem, 5vw, 3rem);
-  margin: clamp(2rem, 6vw, 3rem) 0;
-  list-style: none;
-}
-
-.countdown li {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  min-width: 3.5rem;
-}
-
-/* Siffrorna sätts i sans — Cormorant har gemena siffror som gör att
-   "16" läses som "I6". Tabular-nums håller bredden stilla vid varje tick. */
-.countdown .num {
-  font-family: var(--sans);
-  font-size: clamp(1.6rem, 5vw, 2.35rem);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  font-variant-numeric: tabular-nums lining-nums;
-}
-
-.countdown .unit {
-  font-size: 0.62rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--muted);
+  color: rgba(239, 237, 227, 0.85);
 }
 
 /* ---------- Knapp ---------- */
 
 .btn {
   display: inline-block;
+  margin-top: clamp(2rem, 6vw, 2.75rem);
   padding: 0.95rem 2rem;
   border: 1px solid var(--line);
   color: var(--cream);
@@ -246,7 +220,7 @@ a { color: inherit; }
 .btn:hover {
   background: var(--cream);
   border-color: var(--cream);
-  color: var(--night);
+  color: var(--green);
 }
 
 /* ---------- Sektioner ---------- */
@@ -291,7 +265,7 @@ a { color: inherit; }
   margin-bottom: 1.5rem;
 }
 
-.col-body p { color: rgba(240, 233, 219, 0.75); }
+.col-body p { color: var(--text); }
 .col-body p + p { margin-top: 1rem; }
 
 /* ---------- Nyckelord ---------- */
@@ -315,17 +289,18 @@ a { color: inherit; }
 
 /* ---------- Kort ---------- */
 
+/* Varje kort bär sin egen ram. Ett tidigare försök lät 1px gap mot en
+   ljus containerbakgrund bilda hårlinjerna — snyggt när raden är full,
+   men med tre kort i två spalter lyste den tomma rutan igenom. */
 .cards {
   display: grid;
-  gap: 1px;
+  gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-  background: var(--line); /* mellanrummet blir hårlinjerna mellan korten */
-  border: 1px solid var(--line);
 }
 
 .card {
   padding: 1.75rem;
-  background: var(--panel);
+  border: 1px solid var(--line);
 }
 
 .card h3 {
@@ -333,24 +308,25 @@ a { color: inherit; }
   font-weight: 400;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--muted);
   margin-bottom: 0.75rem;
 }
 
 .card p {
   font-size: 0.95rem;
-  color: rgba(240, 233, 219, 0.75);
+  color: var(--text);
 }
 
 .card a {
+  color: var(--cream);
   text-decoration: none;
   border-bottom: 1px solid var(--line);
   padding-bottom: 2px;
-  word-break: break-word;
+  overflow-wrap: break-word;
   transition: border-color var(--dur-std) var(--ease-out);
 }
 
-.card a:hover { border-color: var(--gold); }
+.card a:hover { border-color: var(--cream); }
 
 /* ---------- Anmälan ---------- */
 
@@ -367,7 +343,7 @@ a { color: inherit; }
 
 .signup-wrap .sub {
   margin-top: 1rem;
-  color: rgba(240, 233, 219, 0.72);
+  color: var(--text);
 }
 
 .signup {
@@ -391,14 +367,14 @@ a { color: inherit; }
 }
 
 .signup input::placeholder { color: var(--muted); }
-.signup input:focus { outline: none; border-color: var(--gold); }
+.signup input:focus { outline: none; border-color: var(--cream); }
 
 .signup button {
   flex: 0 0 auto;
   padding: 0.95rem 1.9rem;
   background: var(--cream);
   border: 1px solid var(--cream);
-  color: var(--night);
+  color: var(--green);
   font: inherit;
   font-size: 0.8rem;
   letter-spacing: 0.16em;
@@ -414,18 +390,44 @@ a { color: inherit; }
   flex: 1 0 100%;
   min-height: 1.5rem;
   font-size: 0.85rem;
-  color: var(--gold);
-}
-
-/* På smal skärm hamnar knappen på egen rad — då får den ta hela bredden. */
-@media (max-width: 30rem) {
-  .signup button { flex: 1 1 100%; }
+  color: var(--cream);
 }
 
 .signup.is-error input { border-color: #C4634F; }
 .signup.is-error .form-msg { color: #C4634F; }
 .signup.is-done input,
 .signup.is-done button { display: none; }
+
+/* På smal skärm hamnar knappen på egen rad — då får den ta hela bredden. */
+@media (max-width: 30rem) {
+  .signup button { flex: 1 1 100%; }
+}
+
+/* ---------- Jobba hos oss ---------- */
+
+/* En smal remsa mellan anmälan och sidfoten. Alexander vill ha raden
+   längst ner — inte som en egen sektion med rubrik. */
+.hiring {
+  padding: 2.5rem var(--gutter);
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+
+.hiring p {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.hiring a {
+  color: var(--cream);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 2px;
+  overflow-wrap: break-word;
+  transition: border-color var(--dur-std) var(--ease-out);
+}
+
+.hiring a:hover { border-color: var(--cream); }
 
 /* ---------- Sidfot ---------- */
 

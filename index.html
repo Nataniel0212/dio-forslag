@@ -3,102 +3,229 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DIO Södermalm — tre förslag</title>
-  <meta name="robots" content="noindex">
+  <title>DIO Södermalm | Öppnar snart</title>
+  <meta name="description" content="DIO Södermalm — italienskt kök och bar mitt på Medborgarplatsen. Öppnar snart. Lämna din mejl så hör vi av oss.">
+  <!-- TILLFÄLLIGT: förhandsvisning på GitHub Pages. TA BORT raden nedan
+       innan sidan går live på riktig domän — annars indexeras den aldrig. -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#000E02">
+  <meta property="og:title" content="DIO Södermalm | Öppnar snart">
+  <meta property="og:description" content="En ny mötesplats mitt på Medborgarplatsen. Öppnar snart.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000E02'/%3E%3Cg fill='none' stroke='%23EFEDE3' stroke-width='3'%3E%3Cpath d='M14 20h6a11 11 0 0 1 0 22h-6z'/%3E%3Cpath d='M32 20v22'/%3E%3Ccircle cx='45' cy='31' r='11'/%3E%3C/g%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Jost:wght@300&display=swap" rel="stylesheet">
-  <style>
-    /* Intern valsida — bara till för att visa de tre förslagen
-       för Alexander. Publiceras inte. */
-    :root {
-      --night: #0A0A0A;
-      --panel: #101010;
-      --cream: #F0E9DB;
-      --gold: #C8A96A;
-      --muted: #8C877E;
-      --line: rgba(240, 233, 219, 0.14);
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: var(--night);
-      color: var(--cream);
-      font-family: "Jost", Arial, sans-serif;
-      font-weight: 300;
-      line-height: 1.7;
-      padding: clamp(3rem, 10vh, 6rem) clamp(1.5rem, 6vw, 5rem);
-    }
-    .head { max-width: 40rem; margin: 0 auto 4rem; text-align: center; }
-    .head h1 {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-weight: 300;
-      font-size: clamp(2rem, 6vw, 3rem);
-      line-height: 1.2;
-    }
-    .head p { color: var(--muted); margin-top: 1rem; }
-    .grid {
-      display: grid;
-      gap: 1.5rem;
-      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-      max-width: 62rem;
-      margin: 0 auto;
-    }
-    .card {
-      display: block;
-      padding: 2rem;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      color: inherit;
-      text-decoration: none;
-      transition: border-color 300ms cubic-bezier(0.25, 1, 0.5, 1),
-                  transform 300ms cubic-bezier(0.25, 1, 0.5, 1);
-    }
-    .card:hover { border-color: var(--gold); transform: translateY(-3px); }
-    .card .n {
-      font-size: 0.7rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-    .card h2 {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-weight: 300;
-      font-size: 1.8rem;
-      margin: 0.75rem 0 0.75rem;
-    }
-    .card p { font-size: 0.92rem; color: rgba(240, 233, 219, 0.72); }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <div class="head">
-    <h1>DIO Södermalm</h1>
-    <p>Tre förslag på hur startsidan kan se ut. Alla tre är rena
-       frontend-skisser — mejlformuläret sparar ingenting än.</p>
-  </div>
+  <!-- ============================================================
+       DIO SÖDERMALM — startsida före öppning
+       Hero med loggan, sedan Om oss, Hitta hit och mejlanmälan.
+       Ramverket är tänkt att stå kvar när menyn och bilderna kommer —
+       då byts sektionerna ut, inte strukturen.
+       ============================================================ -->
 
-  <div class="grid">
-    <a class="card" href="forslag-1/index.html">
-      <p class="n">Förslag 1</p>
-      <h2>Ridån</h2>
-      <p>Helskärm, allt centrerat, ett svagt ljus bakom loggan.
-         Om oss och kontakt ligger under vecket.</p>
+  <header class="topbar">
+    <a class="topbar-logo" href="#top" aria-label="DIO Södermalm">
+      <!-- Liten variant av märket: bara D I O, utan ortsnamnet. -->
+      <svg class="mark" viewBox="0 0 596 213" fill="none" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="9">
+          <path d="M4.5 4.5 H93.5 A102 102 0 0 1 93.5 208.5 H4.5 Z"/>
+          <path d="M289.5 4.5 V208.5"/>
+          <ellipse cx="487" cy="106.5" rx="104.5" ry="102"/>
+        </g>
+      </svg>
     </a>
+    <nav class="topbar-nav" aria-label="Sidnavigering">
+      <a href="#om">Om oss</a>
+      <a href="#hitta">Hitta hit</a>
+      <a href="#anmalan">Håll dig uppdaterad</a>
+    </nav>
+  </header>
 
-    <a class="card" href="forslag-2/index.html">
-      <p class="n">Förslag 2</p>
-      <h2>Delad</h2>
-      <p>Skärmen i två halvor — varumärket och anmälan till vänster,
-         bilden till höger. Flikar i stället för scroll.</p>
-    </a>
+  <main id="top">
 
-    <a class="card" href="forslag-3/index.html">
-      <p class="n">Förslag 3</p>
-      <h2>Editorial</h2>
-      <p>Mest innehåll: hero med nedräkning, om oss, hitta hit och
-         anmälan. Kan växa till den riktiga sajten.</p>
-    </a>
-  </div>
+    <!-- ---------- Hero ---------- -->
+    <section class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <div class="hero-inner">
+        <p class="eyebrow">Medborgarplatsen · Stockholm</p>
+
+        <!-- Loggan ritad som geometriska former, samma konstruktion som
+             originalet: D är ett rakt ben med en halvcirkel, I en linje och
+             O en liggande ellips. Måtten är uppmätta ur Alexanders
+             logotypbild och satta i förhållande till versalhöjden 213:
+             linjebredd 9, D-bredd 200, O-bredd 218, mellanrum 85 resp 84.
+             Ren SVG, alltså knivskarp i alla storlekar och oberoende av
+             vilka typsnitt som laddas. -->
+        <h1 class="logo">
+          <svg class="logo-svg" viewBox="0 0 596 295" fill="none" role="img" aria-labelledby="logo-title">
+            <title id="logo-title">DIO Södermalm</title>
+            <g stroke="currentColor" stroke-width="9">
+              <path d="M4.5 4.5 H93.5 A102 102 0 0 1 93.5 208.5 H4.5 Z"/>
+              <path d="M289.5 4.5 V208.5"/>
+              <ellipse cx="487" cy="106.5" rx="104.5" ry="102"/>
+            </g>
+            <text class="logo-sub" x="298" y="287" text-anchor="middle"
+                  font-size="40" letter-spacing="14.8" fill="currentColor">SÖDERMALM</text>
+          </svg>
+        </h1>
+
+        <p class="hero-line">Öppnar snart</p>
+
+        <a class="btn" href="#anmalan">Meddela mig när ni öppnar</a>
+      </div>
+    </section>
+
+    <!-- ---------- Om oss ---------- -->
+    <section class="section" id="om">
+      <div class="cols">
+        <div class="col-label">
+          <p class="eyebrow">Om oss</p>
+        </div>
+        <div class="col-body">
+          <h2>Ett italienskt vardagsrum mitt på Medborgarplatsen</h2>
+          <p>
+            DIO är en restaurang och bar som öppnar mitt på Medborgarplatsen.
+            Köket är italienskt och ärligt — pasta som görs på plats, råvaror
+            som får vara sig själva och en vinlista som lutar söderut.
+          </p>
+          <p>
+            Kom för en snabb lunch, ett glas efter jobbet eller en kväll som
+            drar ut på tiden. Just nu bygger vi vårt team och räknar ner till
+            premiären.
+          </p>
+          <!-- TODO: ersätt med Alexanders egen text. -->
+
+          <ul class="marks">
+            <li>Italienskt kök</li>
+            <li>Bar &amp; vin</li>
+            <li>Mitt i Söders puls</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Hitta hit ---------- -->
+    <section class="section alt" id="hitta">
+      <div class="cols">
+        <div class="col-label">
+          <p class="eyebrow">Hitta hit</p>
+        </div>
+        <div class="col-body">
+          <div class="cards">
+            <article class="card">
+              <h3>Adress</h3>
+              <p>Medborgarplatsen<br>Stockholm</p>
+              <!-- TODO: fullständig gatuadress när kontraktet är klart. -->
+            </article>
+            <article class="card">
+              <h3>Öppettider</h3>
+              <p>Meddelas i samband med öppningen.</p>
+            </article>
+            <article class="card">
+              <h3>Kontakt</h3>
+              <!-- <wbr> ger adressen en vettig brytpunkt i ett smalt kort:
+                   den delas efter snabel-a, inte mitt i domännamnet. -->
+              <p><a href="mailto:alexander@diosodermalm.se">alexander@<wbr>diosodermalm.se</a></p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Anmälan ---------- -->
+    <section class="section signup-section" id="anmalan">
+      <div class="signup-wrap">
+        <h2>Först in genom dörren</h2>
+        <p class="sub">
+          Lämna din mejl så hör vi av oss när vi öppnar — inget annat,
+          inga utskick däremellan.
+        </p>
+
+        <!-- Formuläret skickar ingenstans än. action/method sätts när
+             vi valt tjänst för utskicken. -->
+        <form class="signup" novalidate>
+          <label class="sr-only" for="mail">Din mejladress</label>
+          <input id="mail" type="email" name="email" placeholder="din@mejl.se"
+                 autocomplete="email" required>
+          <button type="submit">Skicka</button>
+          <p class="form-msg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ---------- Jobba hos oss ---------- -->
+    <section class="hiring">
+      <p>
+        Vill du jobba med oss? Kontakta
+        <a href="mailto:alexander@diosodermalm.se">alexander@<wbr>diosodermalm.se</a>
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 DIO Södermalm</p>
+    <nav>
+      <a href="mailto:alexander@diosodermalm.se">Mejl</a>
+      <a href="https://www.instagram.com/dio.sodermalm/" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+  </footer>
+
+  <script>
+    /* ---------- Sektioner tonar in vid scroll ---------- */
+    (function () {
+      var items = document.querySelectorAll('.section');
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(function (i) { i.classList.add('is-in'); });
+        return;
+      }
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        });
+      }, { threshold: 0.15 });
+
+      items.forEach(function (i) { io.observe(i); });
+    })();
+
+    /* ---------- Formulär ----------
+       Klientvalidering och kvitto. Ingen data lämnar sidan än — när vi
+       valt tjänst för utskicken byts detta mot ett riktigt anrop. */
+    document.querySelectorAll('.signup').forEach(function (form) {
+      var field = form.querySelector('input[type="email"]');
+      var msg = form.querySelector('.form-msg');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(field.value.trim());
+
+        if (!ok) {
+          form.classList.add('is-error');
+          msg.textContent = 'Kontrollera mejladressen.';
+          field.focus();
+          return;
+        }
+
+        form.classList.remove('is-error');
+        form.classList.add('is-done');
+        msg.textContent = 'Tack! Vi hör av oss när vi öppnar.';
+        field.value = '';
+      });
+
+      field.addEventListener('input', function () {
+        form.classList.remove('is-error');
+        if (!form.classList.contains('is-done')) msg.textContent = '';
+      });
+    });
+  </script>
 
 </body>
 </html>
