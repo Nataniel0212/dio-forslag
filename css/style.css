@@ -1,15 +1,14 @@
 /* ============================================================
    DIO SÖDERMALM — startsida före öppning
-   Koncept: samma mörkt gröna rum som Instagram, loggan i ett
-   svagt sken. Sektionerna under heron står i två spalter —
-   etikett till vänster, innehåll till höger.
+   Koncept: ett enda platt mörkgrönt rum med märket som ren
+   linjeteckning. Inget sken, inga skuggor, ingen andra bakgrundston —
+   sidan är en färg rakt igenom.
 
    Palett (samplad ur Alexanders logotypbild):
-     grön   #000E02   bakgrund, nästan svart men tydligt grön
-     panel  #021406   en aning ljusare för varannan sektion
+     grön   #000E02   bakgrunden, hela vägen
      cream  #EFEDE3   linjer och text
-   Ingen guld längre — varumärket är två färger, grönt och cream.
-   Djupet kommer från opacitet, inte från fler kulörer.
+   Varumärket är två färger. Hierarkin byggs med opacitet på cream,
+   aldrig med fler kulörer eller med ljus.
 
    Typografi: Cormorant Garamond (rubriker) · Jost (etiketter/brödtext)
    Motion:  snabb 150ms · standard 300ms · reveal 700ms
@@ -17,19 +16,12 @@
 
 :root {
   --green: #000E02;
-  --panel: #021406;
   --cream: #EFEDE3;
 
   /* Cream i olika styrkor — hierarkin byggs med ljus, inte med kulör. */
   --text: rgba(239, 237, 227, 0.78);
   --muted: rgba(239, 237, 227, 0.45);
   --line: rgba(239, 237, 227, 0.13);
-
-  /* Skenet bakom loggan: grönt utåt, varmt cream närmast linjerna —
-     precis som i profilbilden på Instagram. Håller sig medvetet svagt;
-     bakgrunden ska läsa som platt mörkgrön, inte som en strålkastare. */
-  --glow-green: rgba(46, 138, 74, 0.10);
-  --glow-cream: rgba(239, 237, 227, 0.14);
 
   --serif: "Cormorant Garamond", Didot, Georgia, serif;
   --sans: "Jost", "Helvetica Neue", Arial, sans-serif;
@@ -130,21 +122,6 @@ a { color: inherit; }
   overflow: hidden;
 }
 
-/* Två lager sken i samma punkt: ett brett grönt som lyfter rummet,
-   ett smalare cream som ligger tätt intill loggan. */
-.hero-glow {
-  position: absolute;
-  top: 48%;
-  left: 50%;
-  width: min(110vw, 980px);
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  background:
-    radial-gradient(circle, var(--glow-cream) 0%, transparent 24%),
-    radial-gradient(circle, var(--glow-green) 0%, transparent 72%);
-  pointer-events: none;
-}
-
 /* Bredden sätts explicit, inte med max-width: hero är ett grid med
    place-items: center, och då krymper ett rutobjekt till sitt innehåll —
    vilket gör att procentbredder inuti (loggan) får fel referens. */
@@ -180,9 +157,6 @@ a { color: inherit; }
   color: var(--cream);
   /* overflow: visible så att linjebredden inte kapas mot viewBox-kanten. */
   overflow: visible;
-  /* Samma varma sken som i originalet — ligger på formerna, inte bakom. */
-  filter: drop-shadow(0 0 14px rgba(239, 237, 227, 0.22))
-          drop-shadow(0 0 42px rgba(239, 237, 227, 0.12));
 }
 
 /* Ortsnamnet sitter inne i samma SVG, så det skalar exakt med märket
@@ -238,8 +212,6 @@ a { color: inherit; }
 }
 
 .section.is-in { opacity: 1; transform: none; }
-
-.section.alt { background: var(--panel); }
 
 /* Etikett till vänster, innehåll till höger — spalten fälls ihop
    under 800px och etiketten hamnar då ovanför texten. */

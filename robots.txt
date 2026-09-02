@@ -1,2 +1,6 @@
+# Sidan är live. Sökmotorer är välkomna överallt utom i adminvyn och på
+# endpointerna - de har ingenting där att göra och ska inte hamna i ett
+# sökresultat.
 User-agent: *
-Disallow: /
+Disallow: /admin/
+Disallow: /api/

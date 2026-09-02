@@ -7,7 +7,7 @@ Typsnitt hämtas från Google Fonts (Cormorant Garamond + Jost).
 
     index.html          hela sidan
     css/style.css       stilmallen
-    robots.txt          blockerar sökmotorer så länge sidan är en förhandsvisning
+    robots.txt          håller sökmotorer borta från /admin/ och /api/
 
     inc/                serverkod som aldrig nås direkt (skyddad av .htaccess)
       config.php        databaslösenord och admin-hash — skapas på servern
@@ -28,17 +28,16 @@ Typsnitt hämtas från Google Fonts (Cormorant Garamond + Jost).
 
     arkiv/              de två förslag som inte valdes (publiceras inte)
 
-## Tillfällig förhandsvisning
+## Status: klar för uppladdning
 
-<https://nataniel0212.github.io/dio-forslag/>
+Sidan är lanseringsklar. `noindex` är borttagen och `robots.txt` släpper in
+sökmotorer överallt utom i `/admin/` och `/api/`. Nästa steg är att ladda
+upp till one.com enligt avsnittet nedan.
 
-GitHub Pages kör bara statiska filer, så **formuläret fungerar inte där** —
-det behöver PHP. Förhandsvisningen visar designen, inget annat. Skriver man
-in en adress svarar sidan att servern inte går att nå.
-
-Repot är publikt eftersom GitHub Pages kräver det på gratiskontot, men
-sidan har `noindex` och `robots.txt` blockerar allt — sökmotorer ska
-alltså inte plocka upp den.
+Förhandsvisningen på GitHub Pages är avvecklad. Den kunde ändå bara visa
+designen — Pages kör bara statiska filer, så formuläret behövde PHP för att
+fungera. Ligger sidan kvar där när den riktiga domänen är igång får Google
+två kopior av samma sida att välja mellan, och det vill vi inte.
 
 ## Så testar du lokalt
 
@@ -82,19 +81,12 @@ Vill du bara titta på designen räcker `python -m http.server 8123`.
 7. **Skicka ett testmejl** från `/admin/utskick.php` till dig själv innan
    listan används skarpt.
 
-### Innan sidan går live på riktigt
+### Redan gjort inför lanseringen
 
-- Ta bort `<meta name="robots" content="noindex, nofollow">` högst upp i
-  `index.html`.
-- Byt ut `robots.txt` mot en som släpper in sökmotorer men håller admin
-  utanför:
-
-      User-agent: *
-      Disallow: /admin/
-      Disallow: /api/
-
-- Stäng av GitHub Pages för repot. Annars ligger samma sida på två adresser,
-  och Google får två kopior att välja mellan.
+- `noindex`-taggen är borttagen ur `index.html`.
+- `robots.txt` släpper in sökmotorer utom i `/admin/` och `/api/`.
+- Adminsidorna har kvar sin egen `noindex` — de ska aldrig i ett sökresultat
+  även om någon länkar dit.
 
 ## Mejl
 
@@ -138,6 +130,11 @@ Alexander valde "Editorial"-förslaget. Efter hans genomgång:
   (mörkgrön, nästan svart) och linjer/text `#EFEDE3` (varm cream). Guldet
   från skissen är borta — varumärket är två färger, och djupet kommer från
   opacitet i stället för fler kulörer.
+- Skenet är borttaget. Både radialgradienterna bakom loggan och skuggorna
+  på själva märket är borta, liksom den ljusare panelfärgen för varannan
+  sektion. Sidan är en enda platt `#000E02` rakt igenom, och märket står som
+  ren linjeteckning — det var dimman runt de tunna linjerna som fick heron
+  att se plottrig ut.
 - Loggan är omritad som ren SVG med geometrin uppmätt ur hans bild:
   versalhöjd 213, linjebredd 9, D-bredd 200, O-bredd 218 (liggande ellips),
   mellanrum 85 och 84, SÖDERMALM 61 % av märkets bredd. Vektor, alltså
@@ -146,9 +143,10 @@ Alexander valde "Editorial"-förslaget. Efter hans genomgång:
   sidfoten.
 - Sektionerna "Om oss" och "Hitta hit" är borttagna på Alexanders begäran.
   Kvar är hero, mejlanmälan, jobba-hos-oss-raden och sidfoten. Stilarna för
-  de borttagna delarna (`.cols`, `.marks`, `.cards`/`.card`, `.section.alt`)
-  står kvar i `style.css` — de används inte nu, men är ramen att bygga
-  vidare i när meny och bilder kommer.
+  de borttagna delarna (`.cols`, `.marks`, `.cards`/`.card`) står kvar i
+  `style.css` — de används inte nu, men är ramen att bygga vidare i när meny
+  och bilder kommer. `.section.alt` är däremot borta helt: den gav varannan
+  sektion en annan bakgrund, och sidan ska vara en färg.
 
 ## Vad som inte är på plats än
 
