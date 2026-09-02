@@ -37,6 +37,11 @@ Alexander valde "Editorial"-förslaget. Efter hans genomgång:
   skarp i alla storlekar och oberoende av typsnittsladdning.
 - Raden "Vill du jobba med oss? Kontakta …" ligger längst ner, ovanför
   sidfoten.
+- Sektionerna "Om oss" och "Hitta hit" är borttagna på Alexanders begäran.
+  Kvar är hero, mejlanmälan, jobba-hos-oss-raden och sidfoten. Stilarna för
+  de borttagna delarna (`.cols`, `.marks`, `.cards`/`.card`, `.section.alt`)
+  står kvar i `style.css` — de används inte nu, men är ramen att bygga
+  vidare i när meny och bilder kommer.
 
 ## Vad som inte är på plats än
 
@@ -49,8 +54,6 @@ Alexander valde "Editorial"-förslaget. Efter hans genomgång:
   kommentar högst upp i `index.html`.
 - **Texterna** är platshållare skrivna utifrån Instagram-bion. Alexander bör
   skriva om dem. Sök på `TODO` i filerna.
-- **Adress.** Bara "Medborgarplatsen" är känt, inte gatuadressen.
-- **Öppettider** meddelas senare.
 - **Bilder.** Sidan klarar sig utan, men en interiörbild skulle lyfta
   "Om oss".
 

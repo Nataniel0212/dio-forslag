@@ -22,9 +22,10 @@
 
   <!-- ============================================================
        DIO SÖDERMALM — startsida före öppning
-       Hero med loggan, sedan Om oss, Hitta hit och mejlanmälan.
-       Ramverket är tänkt att stå kvar när menyn och bilderna kommer —
-       då byts sektionerna ut, inte strukturen.
+       Hero med loggan, sedan mejlanmälan. Alexander ville inte ha
+       "Om oss" och "Hitta hit" — texterna där var ändå platshållare,
+       och adress och öppettider är inte spikade. Ramverket står kvar:
+       nya sektioner läggs in på samma sätt när menyn och bilderna kommer.
        ============================================================ -->
 
   <header class="topbar">
@@ -39,8 +40,6 @@
       </svg>
     </a>
     <nav class="topbar-nav" aria-label="Sidnavigering">
-      <a href="#om">Om oss</a>
-      <a href="#hitta">Hitta hit</a>
       <a href="#anmalan">Håll dig uppdaterad</a>
     </nav>
   </header>
@@ -77,63 +76,6 @@
         <p class="hero-line">Öppnar snart</p>
 
         <a class="btn" href="#anmalan">Meddela mig när ni öppnar</a>
-      </div>
-    </section>
-
-    <!-- ---------- Om oss ---------- -->
-    <section class="section" id="om">
-      <div class="cols">
-        <div class="col-label">
-          <p class="eyebrow">Om oss</p>
-        </div>
-        <div class="col-body">
-          <h2>Ett italienskt vardagsrum mitt på Medborgarplatsen</h2>
-          <p>
-            DIO är en restaurang och bar som öppnar mitt på Medborgarplatsen.
-            Köket är italienskt och ärligt — pasta som görs på plats, råvaror
-            som får vara sig själva och en vinlista som lutar söderut.
-          </p>
-          <p>
-            Kom för en snabb lunch, ett glas efter jobbet eller en kväll som
-            drar ut på tiden. Just nu bygger vi vårt team och räknar ner till
-            premiären.
-          </p>
-          <!-- TODO: ersätt med Alexanders egen text. -->
-
-          <ul class="marks">
-            <li>Italienskt kök</li>
-            <li>Bar &amp; vin</li>
-            <li>Mitt i Söders puls</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ---------- Hitta hit ---------- -->
-    <section class="section alt" id="hitta">
-      <div class="cols">
-        <div class="col-label">
-          <p class="eyebrow">Hitta hit</p>
-        </div>
-        <div class="col-body">
-          <div class="cards">
-            <article class="card">
-              <h3>Adress</h3>
-              <p>Medborgarplatsen<br>Stockholm</p>
-              <!-- TODO: fullständig gatuadress när kontraktet är klart. -->
-            </article>
-            <article class="card">
-              <h3>Öppettider</h3>
-              <p>Meddelas i samband med öppningen.</p>
-            </article>
-            <article class="card">
-              <h3>Kontakt</h3>
-              <!-- <wbr> ger adressen en vettig brytpunkt i ett smalt kort:
-                   den delas efter snabel-a, inte mitt i domännamnet. -->
-              <p><a href="mailto:alexander@diosodermalm.se">alexander@<wbr>diosodermalm.se</a></p>
-            </article>
-          </div>
-        </div>
       </div>
     </section>
 
