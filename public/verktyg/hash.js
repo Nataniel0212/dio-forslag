@@ -13,7 +13,10 @@
    Format:  pbkdf2$<varv>$<salt i base64>$<hash i base64>
    ============================================================ */
 
-const VARV = 210000;   // samma storleksordning som OWASP rekommenderar
+/* Workers vägrar PBKDF2 över 100 000 varv (NotSupportedError). Webbläsaren
+   gör det inte, så ett högre tal ger en hash som verktyget skapar utan
+   protest och servern aldrig kan verifiera. Detta är taket. */
+const VARV = 100000;
 
 async function pbkdf2(losenord, salt, varv) {
   const nyckel = await crypto.subtle.importKey(
@@ -52,7 +55,10 @@ export async function stammerLosenord(losenord, sparad) {
   if (delar.length !== 4 || delar[0] !== 'pbkdf2') return false;
 
   const varv = Number(delar[1]);
-  if (!Number.isFinite(varv) || varv < 1000) return false;
+  // Övre gränsen är Workers egen: en hash med fler varv går inte att
+  // verifiera där, och utan den här raden kastar runtimen i stället för
+  // att svara Fel lösenord.
+  if (!Number.isFinite(varv) || varv < 1000 || varv > 100000) return false;
 
   let salt;
   let vantad;
