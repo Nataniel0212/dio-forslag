@@ -23,4 +23,4 @@ SAJT_URL = "https://diosodermalm.se"
 binding = "DB"
 database_name = "dio"
 # Fylls i av `npx wrangler d1 create dio` — kommandot skriver ut id:t.
-database_id = "SATTS_VID_INSTALLATION"  # lokalt struntar wrangler i vardet
+database_id = "cb88cc5e-8742-49af-a362-296e7cf7d1f9"
