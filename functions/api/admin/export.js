@@ -32,8 +32,15 @@ export async function onRequestGet(context) {
   );
 }
 
-/** Citerar ett fält om det innehåller något som annars bryter formatet. */
+/** Citerar ett fält om det innehåller något som annars bryter formatet.
+ *
+ *  Fält som börjar med =, +, - eller @ får ett inledande apostrof. Excel
+ *  och Google Sheets tolkar annars innehållet som en formel, och en
+ *  mejladress är något vem som helst får skriva in i formuläret — utan
+ *  raden nedan räcker det med adressen =HYPERLINK(...)@nagot.se för att
+ *  få något körbart i kalkylbladet Alexander öppnar. */
 function falt(varde) {
   const text = String(varde ?? '');
-  return /[";\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  const skyddad = /^[=+\-@\t\r]/.test(text) ? `'${text}` : text;
+  return /[";\r\n]/.test(skyddad) ? `"${skyddad.replace(/"/g, '""')}"` : skyddad;
 }

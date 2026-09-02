@@ -90,6 +90,20 @@ async function starta(env, falt) {
     return json({ ok: false, meddelande: 'Kryssa i rutan först — ett utskick går inte att ta tillbaka.' }, 422);
   }
 
+  /* Ett utskick som fortfarande har mottagare kvar får inte sällskap av
+     ett till. Två pågående utskick delar inte logg, så samma person hade
+     fått två brev — och det går inte att ta tillbaka. */
+  const pagaende = await env.DB.prepare(
+    'SELECT id FROM utskick WHERE klart IS NULL ORDER BY id DESC LIMIT 1'
+  ).first();
+
+  if (pagaende && (await kvarAttSkicka(env, pagaende.id)) > 0) {
+    return json({
+      ok: false,
+      meddelande: 'Ett utskick är redan igång. Ladda om sidan så fortsätter det där det slutade.',
+    }, 409);
+  }
+
   const resultat = await env.DB.prepare(
     'INSERT INTO utskick (amne, text, skapad) VALUES (?, ?, ?)'
   )

@@ -192,15 +192,19 @@ function visaUtskick() {
   besked($('u-fel'), '');
   besked($('u-ok'), '');
 
-  anropa('/api/admin/utskick', { atgard: 'status' }).then(function (d) {
-    $('u-antal').textContent = d.aktiva;
+  anropa('/api/admin/utskick', { atgard: 'status' })
+    .then(function (d) {
+      $('u-antal').textContent = d.aktiva;
 
-    /* Ett utskick som avbrutits mitt i plockas upp igen så fort sidan
-       öppnas — därför är den här kontrollen viktigare än den ser ut. */
-    if (d.pagaende) {
-      kor(d.pagaende.id);
-    }
-  });
+      /* Ett utskick som avbrutits mitt i plockas upp igen så fort sidan
+         öppnas — därför är den här kontrollen viktigare än den ser ut. */
+      if (d.pagaende) {
+        kor(d.pagaende.id);
+      }
+    })
+    /* Utan catch blir ett trasigt eller utgånget anrop ett tyst avvisat
+       löfte: antalet står kvar som streck och ingenting säger varför. */
+    .catch(function (fel) { besked($('u-fel'), fel.message); });
 }
 
 /* ---------- Utskicket ---------- */

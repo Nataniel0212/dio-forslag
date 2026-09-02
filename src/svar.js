@@ -55,13 +55,22 @@ export async function lasFalt(request) {
   }
 }
 
-/** Skriver en rad i händelseloggen. */
+/* Loggen ska inte växa för evigt. Raderna bär både IP och mejladress, och
+   de behövs bara så länge spärrarna räknar på dem — det längsta fönstret
+   är en timme. En månad räcker gott för att kunna titta bakåt på en
+   spamvåg, och sedan finns uppgifterna inte kvar. */
+const LOGG_DAGAR = 30;
+
+/** Skriver en rad i händelseloggen och städar bort de gamla. */
 export async function logga(env, ip, typ, detalj = '') {
-  await env.DB.prepare(
-    'INSERT INTO handelser (ip, typ, detalj, skapad) VALUES (?, ?, ?, ?)'
-  )
-    .bind(ip, typ, String(detalj).slice(0, 255), nu())
-    .run();
+  await env.DB.batch([
+    env.DB.prepare('INSERT INTO handelser (ip, typ, detalj, skapad) VALUES (?, ?, ?, ?)')
+      .bind(ip, typ, String(detalj).slice(0, 255), nu()),
+    // Ingen schemaläggare finns att hänga städningen på, så den får åka
+    // med här. Skrivningarna är få: en per anmälan, inte per besök.
+    env.DB.prepare('DELETE FROM handelser WHERE skapad < ?')
+      .bind(forSedan(LOGG_DAGAR * 86400)),
+  ]);
 }
 
 /** Hur många händelser av en typ som kommit från samma IP den senaste

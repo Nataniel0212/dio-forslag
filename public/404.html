@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sidan finns inte | DIO Södermalm</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     Utan den här filen svarar Cloudflare Pages med startsidan och
+     statuskoden 200 på varje adress som inte finns. Det ser rätt ut i
+     webbläsaren men är fel för alla andra: sökmotorer indexerar samma
+     sida under oändligt många adresser, och ett felstavat filnamn i
+     koden ser ut att fungera i stället för att larma.
+
+     Sektionen får klassen is-in direkt — .section startar med
+     opacity: 0 och tonas in av skriptet på startsidan, som inte finns här.
+     ============================================================ -->
+
+<main>
+  <section class="section signup-section is-in" style="min-height:100svh;display:grid;place-content:center">
+    <div class="signup-wrap">
+      <h2>Sidan finns inte</h2>
+      <p class="sub">
+        Adressen leder ingenstans. Gå till <a href="/">startsidan</a> i stället.
+      </p>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>
